@@ -8,6 +8,10 @@ enum alt_keycodes {
     DBG_KBD,               //DEBUG Toggle Keyboard Prints
     DBG_MOU,               //DEBUG Toggle Mouse Prints
     MD_BOOT,               //Restart into bootloader after hold timeout
+	
+	WIDETXT, // w i d e t e x t   f o r   a   w i d e   b o y
+    TAUNTXT, // FoR ThE UlTiMaTe sHiTpOsTiNg eXpErIeNcE
+
 };
 
 keymap_config_t keymap_config;
@@ -25,8 +29,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO,U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_MEDIA_PLAY_PAUSE, \
         _______, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, _______, _______, _______,          _______, KC_VOLU, \
         _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, DBG_TOG, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
-        _______, _______, _______,                            _______,                            _______, _______, KC_MEDIA_PREV_TRACK, KC_PGDN, KC_MEDIA_NEXT_TRACK  \
+        _______, _______, TAUNTXT,                            WIDETXT,                            MO(2), _______, KC_MEDIA_PREV_TRACK, KC_PGDN, KC_MEDIA_NEXT_TRACK  \
     ),
+	
+    [2] = LAYOUT(
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______  \
+    ),
+
     /*
     [X] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
@@ -37,6 +50,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     */
 };
+
+
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
@@ -52,6 +67,57 @@ void matrix_scan_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint32_t key_timer;
+	
+	static struct {
+        bool on;
+        bool first;
+    } w_i_d_e_t_e_x_t = {false, false};
+
+    if (w_i_d_e_t_e_x_t.on) {
+        if (record->event.pressed) {
+            switch (keycode) {
+                case KC_A...KC_0:
+                case KC_SPC:
+                    if (w_i_d_e_t_e_x_t.first) {
+                        w_i_d_e_t_e_x_t.first = false;
+                    } else {
+                        send_char(' ');
+                    }
+                    break;
+                case KC_ENT:
+                    w_i_d_e_t_e_x_t.first = true;
+                    break;
+                case KC_BSPC:
+                    send_char('\b'); // backspace
+                    break;
+            }
+        }
+    }
+
+    static bool tAuNtTeXt = false;
+
+    if (tAuNtTeXt) {
+        if (record->event.pressed) {
+            if (keycode != KC_SPC)
+                tap_code(KC_CAPS);
+        }
+    }
+
+    switch (keycode) {
+        /* z e s t y   m e m e s */
+        case WIDETXT:
+            if (record->event.pressed) {
+                w_i_d_e_t_e_x_t.on = !w_i_d_e_t_e_x_t.on;
+                w_i_d_e_t_e_x_t.first = true;
+            }
+            return false;
+        case TAUNTXT:
+            if (record->event.pressed) {
+                tAuNtTeXt = !tAuNtTeXt;
+            }
+            return false;
+	}
+	
 
     switch (keycode) {
         case U_T_AUTO:
@@ -73,7 +139,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 TOGGLE_FLAG_AND_PRINT(debug_matrix, "Debug matrix");
             }
-            return false;
+            return false;	
         case DBG_KBD:
             if (record->event.pressed) {
                 TOGGLE_FLAG_AND_PRINT(debug_keyboard, "Debug keyboard");
