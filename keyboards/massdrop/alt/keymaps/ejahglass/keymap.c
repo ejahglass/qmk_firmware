@@ -11,8 +11,7 @@ enum alt_keycodes {
 	
 	WIDETXT, // w i d e t e x t   f o r   a   w i d e   b o y
     TAUNTXT, // FoR ThE UlTiMaTe sHiTpOsTiNg eXpErIeNcE
-    
-	CHRS, // CHEERS!
+	CHRS,    // CHEERS!
 };
 
 keymap_config_t keymap_config;
@@ -30,7 +29,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO,U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_MEDIA_PLAY_PAUSE, \
         _______, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, _______, _______, _______,          _______, KC_VOLU, \
         _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, DBG_TOG, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
-        _______, _______, TAUNTXT,                            WIDETXT,                            MO(2), _______, KC_MEDIA_PREV_TRACK, KC_PGDN, KC_MEDIA_NEXT_TRACK  \
+        _______, _______, TAUNTXT,                            WIDETXT,                            MO(2), _______, KC_MPRV, KC_PGDN, KC_MNXT  \
     ),
 	
     [2] = LAYOUT(
@@ -129,6 +128,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
   
     switch (keycode) {
+		
         case U_T_AUTO:
             if (record->event.pressed && MODS_SHIFT && MODS_CTRL) {
                 TOGGLE_FLAG_AND_PRINT(usb_extra_manual, "USB extra port manual mode");
@@ -158,7 +158,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 TOGGLE_FLAG_AND_PRINT(debug_mouse, "Debug mouse");
             }
-            return false;
+            return false;	
+			
         case MD_BOOT:
             if (record->event.pressed) {
                 key_timer = timer_read32();
