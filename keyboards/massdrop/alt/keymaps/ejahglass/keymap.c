@@ -11,7 +11,8 @@ enum alt_keycodes {
 	
 	WIDETXT, // w i d e t e x t   f o r   a   w i d e   b o y
     TAUNTXT, // FoR ThE UlTiMaTe sHiTpOsTiNg eXpErIeNcE
-
+    
+	CHRS, // CHEERS!
 };
 
 keymap_config_t keymap_config;
@@ -37,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
-        _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______  \
+        _______, _______, _______,                            CHRS,                            _______, _______, _______, _______, _______  \
     ),
 
     /*
@@ -52,10 +53,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
-
-// Runs just one time when the keyboard initializes.
-void matrix_init_user(void) {
-};
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
@@ -118,7 +115,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
 	}
 	
+	switch (keycode) {
+    case CHRS:
+      if (record->event.pressed) {
+        // when keycode CHRS is pressed
+        SEND_STRING("CHEERS!");
+      } else {
+        // when keycode CHRS is released
+      }
+      break;
 
+  }
+  return true;
+  
     switch (keycode) {
         case U_T_AUTO:
             if (record->event.pressed && MODS_SHIFT && MODS_CTRL) {
