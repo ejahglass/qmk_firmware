@@ -15,7 +15,8 @@ enum alt_keycodes {
 	CHRS,    // CHEERS!
 
     UC_HELP, // URL for QMK unicode help
-    UC_SHRG,              // shrug       - ¯\_(ツ)_/¯
+    UC_SHRG, // shrug       - ¯\_(ツ)_/¯
+    UC_FLIP, // table flip  - (ノಠ痊ಠ)ノ彡┻━┻
 
 #define UC_100  X(E_100)  // hundo       - 💯
 #define UC_BBB  X(E_BBB)  // dat B       - 🅱️
@@ -76,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MEMES] = LAYOUT(
         ___X___, UC_100,  ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
         ___X___, ___X___, ___X___, UC_EYES, ___X___, UC_THNK, ___X___, UC_UGHH, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
-        TAUNTXT, ___X___, UC_SHRG, ___X___, ___X___, UC_GRIM, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
+        TAUNTXT, ___X___, UC_SHRG, ___X___, UC_FLIP, UC_GRIM, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
         ___X___, ___X___, ___X___, UC_CLAP, ___X___, UC_BBB,  ___X___, ___X___, ___X___, ___X___, UC_HELP, ___X___,          ___X___, ___X___, \
         UC_M_OS, UC_M_WC, UC_M_LN,                            CHRS,                            ___X___, ___X___, ___X___, ___X___, ___X___  \
     ),
@@ -175,8 +176,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 send_unicode_hex_string("00AF 005C 005F 0028 30C4 0029 005F 002F 00AF");
             }
             return false;
+        case UC_FLIP: // (ノಠ痊ಠ)ノ彡┻━┻
+            if (record->event.pressed) {
+                send_unicode_string("(ノಠ痊ಠ)ノ彡┻━┻");
+            }
+            return false;
     
-
+        /* Text String Macros */
         case CHRS:
             if (record->event.pressed) {
             // when keycode CHRS is pressed
