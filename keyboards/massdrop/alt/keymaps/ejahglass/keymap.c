@@ -17,6 +17,7 @@ enum alt_keycodes {
     UC_HELP, // URL for QMK unicode help
     UC_SHRG, // shrug       - ¯\_(ツ)_/¯
     UC_FLIP, // table flip  - (ノಠ痊ಠ)ノ彡┻━┻
+    UC_FU,   // fuck you    - ╭∩╮(･◡･)╭∩╮
 
 #define UC_100  X(E_100)  // hundo       - 💯
 #define UC_BBB  X(E_BBB)  // dat B       - 🅱️
@@ -41,7 +42,7 @@ const uint32_t PROGMEM unicode_map[] = {
     [E_BBB]  = 0x1F171, // dat B       - 🅱️
     [E_100]  = 0x1F4AF, // hundo       - 💯
     [E_EYES] = 0x1F440, // shifty eyes - 👀
-    [E_CLAP] = 0x1f44f, // clap        - 👏
+    [E_CLAP] = 0x1F44F, // clap        - 👏
     [E_GRIM] = 0x1f62c, // grimmace    - 😬
     [E_THNK] = 0x1f914, // thinking    - 🤔
     [E_UGHH] = 0x1f629, // UGHHHHH     - 😩
@@ -76,21 +77,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_MEMES] = LAYOUT(
         ___X___, UC_100,  ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
-        ___X___, ___X___, ___X___, UC_EYES, ___X___, UC_THNK, ___X___, UC_UGHH, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
+        ___X___, ___X___, ___X___, UC_EYES, UC_FU, UC_THNK, ___X___, UC_UGHH, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
         ___X___, ___X___, UC_SHRG, ___X___, UC_FLIP, UC_GRIM, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
         ___X___, ___X___, ___X___, UC_CLAP, ___X___, UC_BBB,  ___X___, ___X___, ___X___, ___X___, UC_HELP, ___X___,          ___X___, ___X___, \
         UC_M_OS, UC_M_WC, UC_M_WI,                            CHRS,                            ___X___, ___X___, ___X___, ___X___, ___X___  \
-    ),
-	
-    /*
-    [2] = LAYOUT(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
-        _______, _______, _______,                            CHRS,                            _______, _______, _______, _______, _______  \
-    ),
-    */
+    ),	
 
     /*
     [X] = LAYOUT(
@@ -185,6 +176,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 send_unicode_string("(ノಠ痊ಠ)ノ彡┻━┻");
             }
             return false;
+        case UC_FU: // ╭∩╮(･◡･)╭∩╮
+            if (record->event.pressed) {
+                send_unicode_string("╭∩╮(･◡･)╭∩╮");
+            }
+            return false;
     
         /* Text String Macros */
         case CHRS:
@@ -195,7 +191,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // when keycode CHRS is released
             }
             return true;
-
 
   /* Massdrop debug */
 		
@@ -228,8 +223,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 TOGGLE_FLAG_AND_PRINT(debug_mouse, "Debug mouse");
             }
-            return false;	
-			
+            return false;				
         case MD_BOOT:
             if (record->event.pressed) {
                 key_timer = timer_read32();
@@ -239,6 +233,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
             return false;
+
         case RGB_TOG:
             if (record->event.pressed) {
               switch (rgb_matrix_get_flags()) {
@@ -254,8 +249,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                   break;
                 case LED_FLAG_UNDERGLOW: {
                     rgb_matrix_set_flags(LED_FLAG_NONE);
-                    rgb_matrix_disable_noeeprom();
-                  }
+                    rgb_matrix_disable_noeeprom();                  }
                   break;
                 default: {
                     rgb_matrix_set_flags(LED_FLAG_ALL);
