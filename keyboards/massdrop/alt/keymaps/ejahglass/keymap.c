@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "process_unicode.h"
 
 enum alt_keycodes {
     U_T_AUTO = SAFE_RANGE, //USB Extra Port Toggle Auto Detect / Always Active
@@ -12,26 +13,75 @@ enum alt_keycodes {
 	WIDETXT, // w i d e t e x t   f o r   a   w i d e   b o y
     TAUNTXT, // FoR ThE UlTiMaTe sHiTpOsTiNg eXpErIeNcE
 	CHRS,    // CHEERS!
+
+    UC_HELP, // URL for QMK unicode help
+    UC_SHRG,              // shrug       - ¯\_(ツ)_/¯
+
+#define UC_100  X(E_100)  // hundo       - 💯
+#define UC_BBB  X(E_BBB)  // dat B       - 🅱️
+#define UC_CLAP X(E_CLAP) // clap        - 👏
+#define UC_EYES X(E_EYES) // shifty eyes - 👀
+#define UC_GRIM X(E_GRIM) // grimmace    - 😬
+#define UC_THNK X(E_THNK) // thinking    - 🤔
+#define UC_UGHH X(E_UGHH) // UGHHHHH     - 😩
 };
+
+enum unicode_names {
+    E_100,
+    E_BBB,
+    E_CLAP,
+    E_EYES,
+    E_GRIM,
+    E_THNK,
+    E_UGHH,
+};
+
+const uint32_t PROGMEM unicode_map[] = {
+    [E_BBB]  = 0x1F171, // dat B       - 🅱️
+    [E_100]  = 0x1F4AF, // hundo       - 💯
+    [E_EYES] = 0x1F440, // shifty eyes - 👀
+    [E_CLAP] = 0x1f44f, // clap        - 👏
+    [E_GRIM] = 0x1f62c, // grimmace    - 😬
+    [E_THNK] = 0x1f914, // thinking    - 🤔
+    [E_UGHH] = 0x1f629, // UGHHHHH     - 😩
+};
+
+enum alt_layers {
+    _QWERTY,
+    _ACTIONS,
+    _MEMES,
+};
+
+#define TG_NKRO MAGIC_TOGGLE_NKRO //Toggle 6KRO / NKRO mode
+#define ___X___ XXXXXXX // KC_NO
 
 keymap_config_t keymap_config;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [0] = LAYOUT_65_ansi_blocker(
+    [_QWERTY] = LAYOUT_65_ansi_blocker(
         KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_DEL,  \
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_HOME, \
         KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGUP, \
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,          KC_UP,   KC_PGDN, \
         KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO(1),   KC_LEFT, KC_DOWN, KC_RGHT  \
     ),
-    [1] = LAYOUT_65_ansi_blocker(
+    [_ACTIONS] = LAYOUT_65_ansi_blocker(
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_MUTE, \
         _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO,U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_MEDIA_PLAY_PAUSE, \
         _______, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, _______, _______, _______,          _______, KC_VOLU, \
         _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, DBG_TOG, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
         _______, _______, TAUNTXT,                            WIDETXT,                            MO(2), _______, KC_MPRV, KC_PGDN, KC_MNXT  \
     ),
+
+    [_MEMES] = LAYOUT(
+        ___X___, UC_100,  ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
+        ___X___, ___X___, ___X___, UC_EYES, ___X___, UC_THNK, ___X___, UC_UGHH, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
+        TAUNTXT, ___X___, UC_SHRG, ___X___, ___X___, UC_GRIM, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
+        ___X___, ___X___, ___X___, UC_CLAP, ___X___, UC_BBB,  ___X___, ___X___, ___X___, ___X___, UC_HELP, ___X___,          ___X___, ___X___, \
+        UC_M_OS, UC_M_WC, UC_M_LN,                            CHRS,                            ___X___, ___X___, ___X___, ___X___, ___X___  \
+    ),
 	
+    /*
     [2] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
@@ -39,6 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
         _______, _______, _______,                            CHRS,                            _______, _______, _______, _______, _______  \
     ),
+    */
 
     /*
     [X] = LAYOUT(
@@ -112,22 +163,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tAuNtTeXt = !tAuNtTeXt;
             }
             return false;
-	}
 	
-	switch (keycode) {
-    case CHRS:
-      if (record->event.pressed) {
-        // when keycode CHRS is pressed
-        SEND_STRING("CHEERS!");
-      } else {
-        // when keycode CHRS is released
-      }
-      break;
+	    /* Unicode */
+        case UC_HELP:
+            if (record->event.pressed) {
+                SEND_STRING("https://beta.docs.qmk.fm/features/feature_unicode#input-modes");
+            }
+            return false;
+        case UC_SHRG: // ¯\_(ツ)_/¯
+            if (record->event.pressed) {
+                send_unicode_hex_string("00AF 005C 005F 0028 30C4 0029 005F 002F 00AF");
+            }
+            return false;
+    
 
-  }
-  return true;
-  
-    switch (keycode) {
+        case CHRS:
+            if (record->event.pressed) {
+            // when keycode CHRS is pressed
+                SEND_STRING("CHEERS!");
+            } else {
+            // when keycode CHRS is released
+            }
+            return true;
+
+
+  /* Massdrop debug */
 		
         case U_T_AUTO:
             if (record->event.pressed && MODS_SHIFT && MODS_CTRL) {
