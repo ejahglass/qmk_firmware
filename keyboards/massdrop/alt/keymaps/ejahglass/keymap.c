@@ -77,9 +77,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MEMES] = LAYOUT(
         ___X___, UC_100,  ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
         ___X___, ___X___, ___X___, UC_EYES, ___X___, UC_THNK, ___X___, UC_UGHH, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
-        TAUNTXT, ___X___, UC_SHRG, ___X___, UC_FLIP, UC_GRIM, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
+        ___X___, ___X___, UC_SHRG, ___X___, UC_FLIP, UC_GRIM, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
         ___X___, ___X___, ___X___, UC_CLAP, ___X___, UC_BBB,  ___X___, ___X___, ___X___, ___X___, UC_HELP, ___X___,          ___X___, ___X___, \
-        UC_M_OS, UC_M_WC, UC_M_LN,                            CHRS,                            ___X___, ___X___, ___X___, ___X___, ___X___  \
+        UC_M_OS, UC_M_WC, UC_M_WI,                            CHRS,                            ___X___, ___X___, ___X___, ___X___, ___X___  \
     ),
 	
     /*
@@ -107,6 +107,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
+};
+
+void matrix_init_user(void) {
+  set_unicode_input_mode(UC_WIN);
 };
 
 #define MODS_SHIFT  (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT))
