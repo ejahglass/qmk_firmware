@@ -8,6 +8,9 @@ MCU = cortex-m4
 
 CUSTOM_MATRIX = yes
 
+# Unicode
+UNICODEMAP_ENABLE = yes
+
 # Build Options
 #   comment out to disable the options.
 #
