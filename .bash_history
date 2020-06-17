@@ -16,3 +16,10 @@ git commit -m "redo"
 git push
 git push
 qmk compile
+qmk compile
+qmk compile\
+qmk compile
+git add .
+git commit -m "
+git commit -m "fixed os mode input swap"
+git push
