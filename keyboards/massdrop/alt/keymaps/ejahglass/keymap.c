@@ -52,6 +52,7 @@ enum alt_layers {
     _QWERTY,
     _ACTIONS,
     _MEMES,
+    _ADJUST,
 };
 
 #define TG_NKRO MAGIC_TOGGLE_NKRO //Toggle 6KRO / NKRO mode
@@ -69,10 +70,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_ACTIONS] = LAYOUT_65_ansi_blocker(
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_MUTE, \
-        _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, U_T_AUTO,U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_MEDIA_PLAY_PAUSE, \
-        _______, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, _______, _______, _______,          _______, KC_VOLU, \
-        _______, RGB_TOG, _______, _______, _______, MD_BOOT, NK_TOGG, DBG_TOG, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
-        _______, _______, TAUNTXT,                            WIDETXT,                            MO(2), _______, KC_MPRV, KC_PGDN, KC_MNXT  \
+        _______, _______, _______, _______, _______, _______, _______, U_T_AUTO,U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_MEDIA_PLAY_PAUSE, \
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, KC_VOLU, \
+        _______, _______, _______, _______, _______, MD_BOOT, NK_TOGG, DBG_TOG, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
+        MO(3), _______, TAUNTXT,                            WIDETXT,                            MO(2), _______, KC_MPRV, KC_PGDN, KC_MNXT  \
     ),
 
     [_MEMES] = LAYOUT(
@@ -83,30 +84,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         UC_M_OS, UC_M_WC, UC_M_WI,                            CHRS,                            ___X___, ___X___, ___X___, ___X___, ___X___  \
     ),	
 
-    /*
-    [X] = LAYOUT(
+    
+    [_ADJUST] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, RGB_RMOD, RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, RGB_TOG, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
         _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______  \
     ),
-    */
+    
 };
-
-
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
 };
 
-void matrix_init_user(void) {
-  set_unicode_input_mode(UC_WIN);
-};
-
 #define MODS_SHIFT  (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT))
 #define MODS_CTRL  (get_mods() & MOD_BIT(KC_LCTL) || get_mods() & MOD_BIT(KC_RCTRL))
 #define MODS_ALT  (get_mods() & MOD_BIT(KC_LALT) || get_mods() & MOD_BIT(KC_RALT))
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint32_t key_timer;
@@ -163,7 +159,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	    /* Unicode */
         case UC_HELP:
             if (record->event.pressed) {
-                SEND_STRING("https://beta.docs.qmk.fm/features/feature_unicode#input-modes");
+                SEND_STRING("https://beta.docs.qmk.fm/features/feature_unicode#input-modes"SS_TAP(X_ENTER));
             }
             return false;
         case UC_SHRG: // ¯\_(ツ)_/¯
@@ -262,4 +258,57 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         default:
             return true; //Process all other keycodes normally
     }
+}
+
+uint8_t prev = _QWERTY;
+uint32_t desired = 1;
+uint16_t hue = 120;
+uint16_t sat = 255;
+uint16_t val = 255;
+
+void get_hsv(void) {
+    hue = rgblight_get_hue();
+    sat = rgblight_get_sat();
+    val = rgblight_get_val();
+}
+
+void reset_hsv(void) {
+    rgblight_sethsv(hue, sat, val);
+}
+
+void matrix_init_user() {
+    rgblight_mode(desired);
+    rgblight_enable();
+    reset_hsv();
+}
+
+uint32_t layer_state_set_user(uint32_t state) {
+  uint8_t layer = biton32(state);
+  if (prev!=_ADJUST) {
+      switch (layer) {
+        case _QWERTY:
+          rgblight_mode(desired);
+          if(desired < 6 || (desired > 14 && desired < 25)) { // Skip in rainbow modes.
+            reset_hsv();
+          }
+          break;
+        
+        case _MEMES:
+          rgblight_mode(5);
+          break;
+        
+        case _ACTIONS:
+          rgblight_mode(14);
+          break;
+
+        case _ADJUST:
+          rgblight_mode(desired);
+          break;
+      }
+  } else {
+      desired = rgblight_get_mode();
+      get_hsv();
+  }
+  prev = layer;
+  return state;
 }
