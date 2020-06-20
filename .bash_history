@@ -227,3 +227,28 @@ qmk compile
 git fetch --all
 git reset --hard 
 qmk compile
+git fetch upstream
+git fetch
+git checkout master
+git merge upstream/master
+git rebase upstream/master
+git remote add upstream https://github.com/qmk/qmk_firmware.git
+git fetch upstream
+git checkout master
+git rebase upstream/master
+git commit -m "changes"
+git rebase upstream/master
+git stash .bash_history
+git push -f origin master~
+git rebase upstream/master
+git -f rebase upstream/master
+git add .
+git commit -m "idk"
+git push
+git remote add upstream https://github.com/qmk/qmk_firmware.git
+git fetch upstream
+git checkout master
+git rebase upstream/master
+git add .
+git commit -m "idk stuff"
+git pull
