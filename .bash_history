@@ -214,3 +214,16 @@ qmk compile
 qmk compile
 qmk compile
 qmk compile -kb massdrop/alt -km ejahglass
+git pull
+git push
+git config pull.rebase false
+git pull
+git pull
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+qmk compile
+git fetch --all
+git reset --hard 
+qmk compile
