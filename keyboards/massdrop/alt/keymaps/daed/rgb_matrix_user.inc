@@ -1,0 +1,8 @@
+#include "rgb_matrix_user/common.h"
+#include "rgb_matrix_user/layer1.h"
+#include "rgb_matrix_user/layer2.h"
+#include "rgb_matrix_user/layer3.h"
+#include "rgb_matrix_user/layer4.h"
+#include "rgb_matrix_user/layer5.h"
+#include "rgb_matrix_user/layer6.h"
+#include "rgb_matrix_user/warm_boot.h"

@@ -12,12 +12,16 @@ enum alt_keycodes {
 	
 	WIDETXT, // w i d e t e x t   f o r   a   w i d e   b o y
     TAUNTXT, // FoR ThE UlTiMaTe sHiTpOsTiNg eXpErIeNcE
-	CHRS,    // CHEERS!
+	CHRS,    // cheers
+	OMEGALUL, // OMEGALUL
+	LULW,     // LULW
 
-    UC_HELP, // URL for QMK unicode help
-    UC_SHRG, // shrug       - ¯\_(ツ)_/¯
-    UC_FLIP, // table flip  - (ノಠ痊ಠ)ノ彡┻━┻
-    UC_FU,   // fuck you    - ╭∩╮(･◡･)╭∩╮
+    UC_HELP,   // URL for QMK unicode help
+    UC_SHRG,   // shrug       - ¯\_(ツ)_/¯
+    UC_FLIP,   // table flip  - (ノಠ痊ಠ)ノ彡┻━┻
+    UC_FU,     // fuck you    - ╭∩╮(･◡･)╭∩╮
+	UC_MIGHTY, // mighty donger - ᕙ༼ຈل͜ຈ༽ᕗ
+	UC_JAM,    // jammin        - ♫ ┌༼ຈل͜ຈ༽┘ ♪
 
 #define UC_100  X(E_100)  // hundo       - 💯
 #define UC_BBB  X(E_BBB)  // dat B       - 🅱️
@@ -26,6 +30,7 @@ enum alt_keycodes {
 #define UC_GRIM X(E_GRIM) // grimmace    - 😬
 #define UC_THNK X(E_THNK) // thinking    - 🤔
 #define UC_UGHH X(E_UGHH) // UGHHHHH     - 😩
+#define UC_THMB X(E_THMB) // thumbs up   - 👍
 };
 
 enum unicode_names {
@@ -36,6 +41,7 @@ enum unicode_names {
     E_GRIM,
     E_THNK,
     E_UGHH,
+	E_THMB,
 };
 
 const uint32_t PROGMEM unicode_map[] = {
@@ -46,6 +52,7 @@ const uint32_t PROGMEM unicode_map[] = {
     [E_GRIM] = 0x1f62c, // grimmace    - 😬
     [E_THNK] = 0x1f914, // thinking    - 🤔
     [E_UGHH] = 0x1f629, // UGHHHHH     - 😩
+	[E_THMB] = 0x1F44D, // thumbs up   - 👍
 };
 
 enum alt_layers {
@@ -53,11 +60,12 @@ enum alt_layers {
     _ACTIONS,
     _MEMES,
     _ADJUST,
+	_TWITCH,
 };
 
 #define TG_NKRO MAGIC_TOGGLE_NKRO //Toggle 6KRO / NKRO mode
 #define ___X___ XXXXXXX // KC_NO
-
+#define TAPPING_TOGGLE 2
 keymap_config_t keymap_config;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -77,14 +85,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [_MEMES] = LAYOUT(
-        ___X___, UC_100,  ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
+        TG(_TWITCH), UC_100,  ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, UC_THMB, ___X___, ___X___, \
         ___X___, ___X___, ___X___, UC_EYES, UC_FU, UC_THNK, ___X___, UC_UGHH, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
-        ___X___, ___X___, UC_SHRG, ___X___, UC_FLIP, UC_GRIM, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
-        ___X___, ___X___, ___X___, UC_CLAP, ___X___, UC_BBB,  ___X___, ___X___, ___X___, ___X___, UC_HELP, ___X___,          ___X___, ___X___, \
+        ___X___, ___X___, UC_SHRG, ___X___, UC_FLIP, UC_GRIM, ___X___, UC_JAM, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
+        ___X___, ___X___, ___X___, UC_CLAP, ___X___, UC_BBB,  ___X___, UC_MIGHTY, ___X___, ___X___, UC_HELP, ___X___,          ___X___, ___X___, \
         UC_M_OS, UC_M_WC, UC_M_WI,                            CHRS,                            ___X___, ___X___, ___X___, ___X___, ___X___  \
     ),	
 
-    
     [_ADJUST] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
         _______, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
@@ -92,6 +99,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, RGB_TOG, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
         _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______  \
     ),
+    
+	    [_TWITCH] = LAYOUT(
+        TG(_TWITCH), ___X___,  ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
+        ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, \
+        ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
+        ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,  ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,          ___X___, ___X___, \
+        ___X___, ___X___, ___X___,                           KC_SPC,                            LULW, OMEGALUL, ___X___, ___X___, ___X___  \
+    ),	
     
 };
 
@@ -177,16 +192,47 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 send_unicode_string("╭∩╮(･◡･)╭∩╮");
             }
             return false;
+			
+		case UC_MIGHTY: // ᕙ༼ຈل͜ຈ༽ᕗ
+            if (record->event.pressed) {
+                send_unicode_string("ᕙ༼ຈل͜ຈ༽ᕗ");
+            }
+            return false;	
+			
+		case UC_JAM: // ♫ ┌༼ຈل͜ຈ༽┘ ♪
+		    if (record->event.pressed) {
+				send_unicode_string("♫ ┌༼ຈل͜ຈ༽┘ ♪");
+			}
+			return false;
     
         /* Text String Macros */
         case CHRS:
             if (record->event.pressed) {
             // when keycode CHRS is pressed
-                SEND_STRING("CHEERS!");
+                send_unicode_string("cheers! ( ຈ∀ຈ)y─┛");
             } else {
             // when keycode CHRS is released
             }
             return true;
+			
+		case OMEGALUL:
+            if (record->event.pressed) {
+            // when keycode OMEGALUL is pressed
+                send_string("OMEGALUL");
+            } else {
+            // when keycode OMEGALUL is released
+            }
+            return true;
+			
+		case LULW:
+            if (record->event.pressed) {
+            // when keycode LULW is pressed
+                send_string("LULW");
+            } else {
+            // when keycode LULW is released
+            }
+            return true;
+
 
   /* Massdrop debug */
 		
@@ -293,12 +339,12 @@ uint32_t layer_state_set_user(uint32_t state) {
           }
           break;
         
-        case _MEMES:
-          rgblight_mode(5);
-          break;
-        
         case _ACTIONS:
           rgblight_mode(14);
+          break;
+        
+        case _MEMES:
+          rgblight_mode(5);
           break;
 
         case _ADJUST:

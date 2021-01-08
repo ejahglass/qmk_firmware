@@ -1,6 +1,6 @@
 # HSTS 1.0 Known Hosts database for GNU Wget.
 # Edit at your own risk.
 # <hostname>	<port>	<incl. subdomains>	<created>	<max-age>
-www.obdev.at	0	0	1592378790	15552000
-www.pjrc.com	0	0	1592378789	15552000
-github.com	0	1	1592378791	31536000
+www.obdev.at	0	0	1594350335	15552000
+www.pjrc.com	0	0	1594350333	15552000
+github.com	0	1	1594350336	31536000
